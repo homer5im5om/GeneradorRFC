@@ -68,10 +68,6 @@ fun App() {
 }
 
 fun calcularRFC(nombre: String, paterno: String, materno: String, fecha: String): String {
-    if (nombre.isBlank() || paterno.isBlank() || fecha.isBlank()) {
-        return "Esperando datos completos..."
-    }
-
     val nom = nombre.trim().uppercase()
     val pat = paterno.trim().uppercase()
     val mat = materno.trim().uppercase()
@@ -83,13 +79,13 @@ fun calcularRFC(nombre: String, paterno: String, materno: String, fecha: String)
         it == 'A' || it == 'E' || it == 'I' || it == 'O' || it == 'U'
     } ?: 'X'
 
-    val primeraLetraMat = if (mat.isNotEmpty()) mat.first() else 'X'
+    val primeraLetraMat = mat.firstOrNull() ?: 'X'
 
     val nombres = nom.split(" ").filter { it.isNotEmpty() }
     val nombreValido = if (nombres.size > 1 && (nombres[0] == "JOSE" || nombres[0] == "MARIA")) {
         nombres[1]
     } else {
-        nombres.firstOrNull() ?: "X"
+        nombres.firstOrNull() ?: ""
     }
     val primeraLetraNom = nombreValido.firstOrNull() ?: 'X'
 
@@ -108,5 +104,7 @@ fun calcularRFC(nombre: String, paterno: String, materno: String, fecha: String)
         letrasRfc = letrasRfc.substring(0, 3) + "X"
     }
 
-    return letrasRfc + fec
+    val fechaFormateada = fec.padEnd(6, 'X').substring(0, 6)
+
+    return letrasRfc + fechaFormateada
 }
